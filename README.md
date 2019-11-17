@@ -56,3 +56,6 @@ For Sketch Colour Picker
         picker="sketch" />
 
 ```
+
+### Dependency
+This package is dependent on [vue-color](https://xiaokaike.github.io/vue-color/) and [laravel-mix](https://laravel-mix.com/)
