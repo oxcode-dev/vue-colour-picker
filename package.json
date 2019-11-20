@@ -3,6 +3,10 @@
   "version": "0.0.2",
   "description": "Vue Colour picker using vue-color.",
   "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/codeosemeke/vue-colour-picker"
+  },
   "keywords": [
     "colour-picker",
     "vue",
