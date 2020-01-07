@@ -57,5 +57,17 @@ For Sketch Colour Picker
 
 ```
 
+Without Input
+```
+
+   <colour-picker
+        v-model="colour"
+        :value="colour"
+        label="Pick Colour"
+        no-input
+        picker="sketch" />
+
+```
+
 ### Dependency
 This package is dependent on [vue-color](https://xiaokaike.github.io/vue-color/) and [laravel-mix](https://laravel-mix.com/)

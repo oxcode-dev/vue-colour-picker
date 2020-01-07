@@ -7,17 +7,19 @@
                 v-bind="$attrs" class="color-input"
                 @focus="showPicker()" @input="updateFromInput"
                 placeholder="Pick colour..."
+                v-if="!noInput"
             />
 
             <span class="input-group-addon color-picker-container">
-                <span class="current-color" :style="'background-color: ' + colorValue" @click="togglePicker()"></span>
+                <span class="current-color" :style="colorBox()" @click="togglePicker()"></span>
             </span>
 
             <div style="position:relative">
-                <chrome-picker :value="colors" @input="updateFromPicker" v-if="picker === 'chrome' && displayPicker" />
-                <sketch-picker :value="colors" @input="updateFromPicker" v-if="picker === 'sketch' && displayPicker" />
-                <compact-picker :value="colors" @input="updateFromPicker" v-if="picker === 'compact' && displayPicker" />
+                <chrome-picker :value="colors" @input="updateFromPicker" v-show="picker === 'chrome' && displayPicker" :class="noInput ? 'vc-left' : 'vc-right'" />
+                <sketch-picker :value="colors" @input="updateFromPicker" v-show="picker === 'sketch' && displayPicker" :class="noInput ? 'vc-left' : 'vc-right'" />
+                <compact-picker :value="colors" @input="updateFromPicker" v-show="picker === 'compact' && displayPicker" :class="noInput ? 'vc-left' : 'vc-right'" />
             </div>
+
         </div>
 
     </div>
@@ -35,6 +37,10 @@ export default {
     },
     inheritAttrs: false,
     props: {
+        noInput:{
+            type: Boolean,
+            default: () => false
+        },
         color: {
             type: String,
             default: () => '',
@@ -49,7 +55,8 @@ export default {
             validator: value => {
                  return ['chrome', 'compact', 'sketch'].indexOf(value) !== -1
             }
-        }
+        },
+
     },
     data() {
         return {
@@ -63,6 +70,13 @@ export default {
     },
 
     methods: {
+        colorBox(){
+            let border = this.noInput ? '4px' : '0px 4px 4px 0px';
+            return `background-color: ${this.colorValue};
+                    border-radius: ${border}
+                    `;
+        },
+
         setColor(color) {
             this.updateColors(color);
             this.colorValue = color;
@@ -140,6 +154,12 @@ export default {
 
 
 <style>
+    .vc-left{
+        left: -39px;
+    }
+    .vc-right{
+        right: 0;
+    }
     .color-input{
         padding: .5rem;
         line-height: 1.5;
@@ -166,7 +186,6 @@ export default {
         position: absolute !important;
         /*bottom: 44px;*/
         top: 42px;
-        right: 0;
         z-index: 100;
     }
     .current-color {
