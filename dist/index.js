@@ -132,6 +132,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 
@@ -143,6 +145,12 @@ __webpack_require__.r(__webpack_exports__);
   },
   inheritAttrs: false,
   props: {
+    noInput: {
+      type: Boolean,
+      "default": function _default() {
+        return false;
+      }
+    },
     color: {
       type: String,
       "default": function _default() {
@@ -176,6 +184,10 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    colorBox: function colorBox() {
+      var border = this.noInput ? '4px' : '0px 4px 4px 0px';
+      return "background-color: ".concat(this.colorValue, ";\n                    border-radius: ").concat(border, "\n                    ");
+    },
     setColor: function setColor(color) {
       this.updateColors(color);
       this.colorValue = color;
@@ -255,7 +267,7 @@ exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader
 
 
 // module
-exports.push([module.i, "\n.color-input{\n    padding: .5rem;\n    line-height: 1.5;\n    display: block;\n    width: 100%;\n    border-width: 1px;\n    color: #3d4852;\n    background-color: #fff;\n    border-radius: .25rem;\n    text-align: left;\n    -webkit-appearance: none;\n    -moz-appearance: none;\n    appearance: none;\n    position: relative;\n}\n.color-picker{\n    position: relative;\n    display: flex;\n    width: 100%;\n}\n.vc-chrome,\n.vc-compact,\n.vc-sketch {\n    position: absolute !important;\n    /*bottom: 44px;*/\n    top: 42px;\n    right: 0;\n    z-index: 100;\n}\n.current-color {\n    display: inline-block;\n    width: 40px;\n    height: 40px;\n    background-color: #000;\n    cursor: pointer;\n}\n", ""]);
+exports.push([module.i, "\n.vc-left{\n    left: -39px;\n}\n.vc-right{\n    right: 0;\n}\n.color-input{\n    padding: .5rem;\n    line-height: 1.5;\n    display: block;\n    width: 100%;\n    border-width: 1px;\n    color: #3d4852;\n    background-color: #fff;\n    border-radius: .25rem;\n    text-align: left;\n    -webkit-appearance: none;\n    -moz-appearance: none;\n    appearance: none;\n    position: relative;\n}\n.color-picker{\n    position: relative;\n    display: flex;\n    width: 100%;\n}\n.vc-chrome,\n.vc-compact,\n.vc-sketch {\n    position: absolute !important;\n    /*bottom: 44px;*/\n    top: 42px;\n    z-index: 100;\n}\n.current-color {\n    display: inline-block;\n    width: 40px;\n    height: 40px;\n    background-color: #000;\n    cursor: pointer;\n}\n", ""]);
 
 // exports
 
@@ -929,25 +941,27 @@ var render = function() {
         staticStyle: { width: "100%" }
       },
       [
-        _c(
-          "input",
-          _vm._b(
-            {
-              ref: "input",
-              staticClass: "color-input",
-              attrs: { type: "text", placeholder: "Pick colour..." },
-              on: {
-                focus: function($event) {
-                  return _vm.showPicker()
+        !_vm.noInput
+          ? _c(
+              "input",
+              _vm._b(
+                {
+                  ref: "input",
+                  staticClass: "color-input",
+                  attrs: { type: "text", placeholder: "Pick colour..." },
+                  on: {
+                    focus: function($event) {
+                      return _vm.showPicker()
+                    },
+                    input: _vm.updateFromInput
+                  }
                 },
-                input: _vm.updateFromInput
-              }
-            },
-            "input",
-            _vm.$attrs,
-            false
-          )
-        ),
+                "input",
+                _vm.$attrs,
+                false
+              )
+            )
+          : _vm._e(),
         _vm._v(" "),
         _c(
           "span",
@@ -955,7 +969,7 @@ var render = function() {
           [
             _c("span", {
               staticClass: "current-color",
-              style: "background-color: " + _vm.colorValue,
+              style: _vm.colorBox(),
               on: {
                 click: function($event) {
                   return _vm.togglePicker()
@@ -969,26 +983,47 @@ var render = function() {
           "div",
           { staticStyle: { position: "relative" } },
           [
-            _vm.picker === "chrome" && _vm.displayPicker
-              ? _c("chrome-picker", {
-                  attrs: { value: _vm.colors },
-                  on: { input: _vm.updateFromPicker }
-                })
-              : _vm._e(),
+            _c("chrome-picker", {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.picker === "chrome" && _vm.displayPicker,
+                  expression: "picker === 'chrome' && displayPicker"
+                }
+              ],
+              class: _vm.noInput ? "vc-left" : "vc-right",
+              attrs: { value: _vm.colors },
+              on: { input: _vm.updateFromPicker }
+            }),
             _vm._v(" "),
-            _vm.picker === "sketch" && _vm.displayPicker
-              ? _c("sketch-picker", {
-                  attrs: { value: _vm.colors },
-                  on: { input: _vm.updateFromPicker }
-                })
-              : _vm._e(),
+            _c("sketch-picker", {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.picker === "sketch" && _vm.displayPicker,
+                  expression: "picker === 'sketch' && displayPicker"
+                }
+              ],
+              class: _vm.noInput ? "vc-left" : "vc-right",
+              attrs: { value: _vm.colors },
+              on: { input: _vm.updateFromPicker }
+            }),
             _vm._v(" "),
-            _vm.picker === "compact" && _vm.displayPicker
-              ? _c("compact-picker", {
-                  attrs: { value: _vm.colors },
-                  on: { input: _vm.updateFromPicker }
-                })
-              : _vm._e()
+            _c("compact-picker", {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.picker === "compact" && _vm.displayPicker,
+                  expression: "picker === 'compact' && displayPicker"
+                }
+              ],
+              class: _vm.noInput ? "vc-left" : "vc-right",
+              attrs: { value: _vm.colors },
+              on: { input: _vm.updateFromPicker }
+            })
           ],
           1
         )
