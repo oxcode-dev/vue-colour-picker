@@ -123,8 +123,6 @@ export default {
             else {
                 this.colorValue = 'rgba(' + color.rgba.r + ', ' + color.rgba.g + ', ' + color.rgba.b + ', ' + color.rgba.a + ')';
             }
-
-            this.displayPicker = false;
         },
 
         documentClick(e) {
